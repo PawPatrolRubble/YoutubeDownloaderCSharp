@@ -98,6 +98,8 @@ public class DownloadMultipleSetupViewModel : DialogScreen<IReadOnlyList<Downloa
                     filePath
                 )
             );
+
+            Logging.LoggingService.Logger?.Log($"adding {video.Title} completes");
         }
 
         _settingsService.LastContainer = SelectedContainer;

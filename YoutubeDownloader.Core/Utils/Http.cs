@@ -1,11 +1,12 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
 
 namespace YoutubeDownloader.Core.Utils;
 
 internal static class Http
 {
-    public static HttpClient Client { get; } = new()
+    public static HttpClient Client { get; } = new(handler:CreateHttpClientHandler())
     {
         DefaultRequestHeaders =
         {
@@ -19,4 +20,16 @@ internal static class Http
             }
         }
     };
+
+    private static HttpClientHandler CreateHttpClientHandler()
+    {
+        var webProxy = new WebProxy()
+        {
+            Address = new System.Uri("socks5://127.0.0.1:1088")
+        };
+        return new HttpClientHandler()
+        {
+            Proxy = webProxy
+        };
+    }
 }

@@ -13,6 +13,7 @@ namespace YoutubeDownloader.ViewModels.Components;
 
 public class DownloadViewModel : PropertyChangedBase, IDisposable
 {
+
     private readonly IViewModelFactory _viewModelFactory;
     private readonly DialogManager _dialogManager;
 

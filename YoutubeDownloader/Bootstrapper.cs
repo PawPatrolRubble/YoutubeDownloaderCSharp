@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Stylet;
 using StyletIoC;
+using YoutubeDownloader.Logging;
 using YoutubeDownloader.Services;
 using YoutubeDownloader.ViewModels;
 using YoutubeDownloader.ViewModels.Framework;
@@ -30,6 +31,7 @@ namespace YoutubeDownloader
         {
             base.ConfigureIoC(builder);
 
+            builder.Bind<IYoutubeLogger>().To<LoggingService>().InSingletonScope();
             builder.Bind<SettingsService>().ToSelf().InSingletonScope();
             builder.Bind<IViewModelFactory>().ToAbstractFactory();
         }

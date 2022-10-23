@@ -64,6 +64,7 @@ public class DownloadSingleSetupViewModel : DialogScreen<DownloadViewModel>
         File.WriteAllBytes(filePath, Array.Empty<byte>());
 
         _settingsService.LastContainer = container;
+        Logging.LoggingService.Logger?.Log($"adding {Video?.Title} completes");
 
         Close(
             _viewModelFactory.CreateDownloadViewModel(Video!, SelectedDownloadOption!, filePath)

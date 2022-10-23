@@ -2,12 +2,14 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using Gress;
 using Gress.Completable;
 using Stylet;
 using YoutubeDownloader.Core.Downloading;
 using YoutubeDownloader.Core.Resolving;
 using YoutubeDownloader.Core.Tagging;
+using YoutubeDownloader.Logging;
 using YoutubeDownloader.Services;
 using YoutubeDownloader.Utils;
 using YoutubeDownloader.ViewModels.Dialogs;
@@ -18,6 +20,7 @@ namespace YoutubeDownloader.ViewModels.Components;
 
 public class DashboardViewModel : PropertyChangedBase, IDisposable
 {
+
     private readonly IViewModelFactory _viewModelFactory;
     private readonly DialogManager _dialogManager;
     private readonly SettingsService _settingsService;
@@ -38,16 +41,23 @@ public class DashboardViewModel : PropertyChangedBase, IDisposable
     public string? Query { get; set; }
 
     public BindableCollection<DownloadViewModel> Downloads { get; } = new();
-
+    public BindableCollection<string> Logs { get; set; } = new();
+    private IYoutubeLogger _logger;
     public DashboardViewModel(
         IViewModelFactory viewModelFactory,
         DialogManager dialogManager,
-        SettingsService settingsService)
+        SettingsService settingsService,
+        IYoutubeLogger logger)
     {
         _viewModelFactory = viewModelFactory;
         _dialogManager = dialogManager;
         _settingsService = settingsService;
+        _logger = logger;
 
+        _logger.OnLogArrives += (sender, s) =>
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(Logs.Add, s);
+        };
         _progressMuxer = Progress.CreateMuxer().WithAutoReset();
 
         _settingsService.BindAndInvoke(o => o.ParallelLimit, (_, e) => _downloadSemaphore.MaxCount = e.NewValue);

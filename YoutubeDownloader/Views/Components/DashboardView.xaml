@@ -16,6 +16,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="150" />
         </Grid.RowDefinitions>
 
         <!--  Toolbar  -->
@@ -31,6 +33,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
@@ -55,14 +58,33 @@
                         AcceptsReturn="True"
                         BorderThickness="0"
                         FontSize="16"
+                        GotKeyboardFocus="QueryTextBox_OnGotKeyboardFocus"
+                        LostKeyboardFocus="QueryTextBox_OnLostKeyboardFocus"
+                        LostMouseCapture="QueryTextBox_OnLostMouseCapture"
                         MaxLines="4"
                         PreviewKeyDown="QueryTextBox_OnPreviewKeyDown"
                         Text="{Binding Query, UpdateSourceTrigger=PropertyChanged}"
                         VerticalScrollBarVisibility="Auto" />
 
-                    <!--  Process query button  -->
+
                     <Button
                         Grid.Column="2"
+                        Margin="0,6,6,6"
+                        Padding="4"
+                        Click="ButtonBase_OnClick"
+                        IsDefault="True"
+                        Style="{DynamicResource MaterialDesignFlatButton}"
+                        ToolTip="Process query (Enter)">
+
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            Kind="clear" />
+                    </Button>
+
+                    <!--  Process query button  -->
+                    <Button
+                        Grid.Column="3"
                         Margin="0,6,6,6"
                         Padding="4"
                         Command="{s:Action ProcessQuery}"
@@ -365,5 +387,14 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
+
+
+        <TextBlock Margin="5 0 0 0" FontSize="18" Text="logs" Grid.Row="3"></TextBlock>
+        <!--  message and logs  -->
+        <ListBox 
+            MinHeight="150"
+            Margin="5"
+            Grid.Row="4" ItemsSource="{Binding Logs}" />
+
     </Grid>
 </UserControl>

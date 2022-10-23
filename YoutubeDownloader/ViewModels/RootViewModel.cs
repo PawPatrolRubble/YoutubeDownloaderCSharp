@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MaterialDesignThemes.Wpf;
 using Stylet;
+using YoutubeDownloader.Logging;
 using YoutubeDownloader.Services;
 using YoutubeDownloader.Utils;
 using YoutubeDownloader.ViewModels.Components;
@@ -25,6 +26,7 @@ public class RootViewModel : Screen
         IViewModelFactory viewModelFactory,
         DialogManager dialogManager,
         SettingsService settingsService,
+        IYoutubeLogger logger,
         UpdateService updateService)
     {
         _viewModelFactory = viewModelFactory;
@@ -35,23 +37,26 @@ public class RootViewModel : Screen
         Dashboard = _viewModelFactory.CreateDashboardViewModel();
 
         DisplayName = $"{App.Name} v{App.VersionString}";
+        Logging.LoggingService.Logger = logger;
+
+        Logging.LoggingService.Logger.Log("app started");
     }
 
     private async Task ShowWarInUkraineMessageAsync()
     {
-        var dialog = _viewModelFactory.CreateMessageBoxViewModel(
-            "Ukraine is at war!", @"
-My country, Ukraine, has been invaded by Russian military forces in an act of aggression that can only be described as genocide.
-Be on the right side of history! Consider supporting Ukraine in its fight for freedom.
+//        var dialog = _viewModelFactory.CreateMessageBoxViewModel(
+//            "Ukraine is at war!", @"
+//My country, Ukraine, has been invaded by Russian military forces in an act of aggression that can only be described as genocide.
+//Be on the right side of history! Consider supporting Ukraine in its fight for freedom.
 
-Press LEARN MORE to find ways that you can help.".Trim(),
-            "LEARN MORE", "CLOSE"
-        );
+//Press LEARN MORE to find ways that you can help.".Trim(),
+//            "LEARN MORE", "CLOSE"
+//        );
 
-        if (await _dialogManager.ShowDialogAsync(dialog) == true)
-        {
-            ProcessEx.StartShellExecute("https://tyrrrz.me");
-        }
+        //if (await _dialogManager.ShowDialogAsync(dialog) == true)
+        //{
+        //    ProcessEx.StartShellExecute("https://tyrrrz.me");
+        //}
     }
 
     private async Task CheckForUpdatesAsync()
@@ -83,8 +88,8 @@ Press LEARN MORE to find ways that you can help.".Trim(),
 
     public async void OnViewFullyLoaded()
     {
-        await ShowWarInUkraineMessageAsync();
-        await CheckForUpdatesAsync();
+        //await ShowWarInUkraineMessageAsync();
+        //await CheckForUpdatesAsync();
     }
 
     protected override void OnViewLoaded()
